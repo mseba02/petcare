@@ -1,0 +1,18 @@
+header{
+    height: 72px;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+.logo{
+    max-width: 70px;
+}
+.register-popup{
+    position: fixed;
+    width: 500px;
+    margin: 0 auto;
+    right: 0;
+    left: 0;
+    top: 200px;
+    backgroud: #fff;
+    border: 1px solid #ccc;
+}

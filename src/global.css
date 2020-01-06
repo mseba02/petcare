@@ -13,6 +13,47 @@ code {
 }
 
 .container{
-  width: 1200px;
+  width: 1000px;
   margin: 0 auto;
+}
+.d-flex{
+  display: flex;
+}
+*{
+  box-sizing: border-box;
+  font-size: 14px;
+}
+img{
+  max-width: 100%;
+  height: auto;
+}
+a{
+  text-decoration: none;
+}
+a:hover{
+  color: #335C67;
+}
+input{
+  display: block;
+}
+.flex-3{
+  flex: 0 0 33.3%;
+  max-width: 33.3%;
+}
+.flex-2{
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+.inline-list li{
+  display: inline-block;
+  margin-left: 40px;
+}
+.text-right{
+  text-align: right;
+}
+.text-center{
+  text-align: center;
+}
+.text-left{
+  text-align: left;
 }
