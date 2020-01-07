@@ -21,10 +21,14 @@ class Header extends  Component {
         return(
             <header>
                 <form className="register-popup">
-                    <input type="text"  placeholder="Name"/>
+                    <h4>Register</h4>
+                    <div>
+                        <label>Name</label>
+                        <input type="text"  placeholder=""/>
+                    </div>
                     <input type="text"  placeholder="User"/>
                     <input type="text"  placeholder="Password"/>
-                    <button>Register</button>
+                    <button>Sign up</button>
                 </form>
                <div className="container">
                    <div className="d-flex">

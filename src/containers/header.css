@@ -7,12 +7,16 @@ header{
     max-width: 70px;
 }
 .register-popup{
+    padding: 30px;
     position: fixed;
-    width: 500px;
+    width:400px;
     margin: 0 auto;
     right: 0;
     left: 0;
     top: 200px;
     backgroud: #fff;
     border: 1px solid #ccc;
+}
+.register-popup label{
+    position: absolute;
 }
