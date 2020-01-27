@@ -17,6 +17,25 @@ header{
     backgroud: #fff;
     border: 1px solid #ccc;
 }
-.register-popup label{
+.register__label{
     position: absolute;
+    top: 10px;
+    transition: all 0.3s ease;
+    cursor: text;
+}
+.register__title{
+    margin-bottom: 30px;
+    font-size: 18px;
+    text-align: center;
+}
+.register__input{
+    padding-left: 0;
+}
+.register__input:focus + label{
+    top: -10px;
+    font-size: 12px;
+}
+.register__close + label{
+    top: -10px;
+    font-size: 12px;
 }
