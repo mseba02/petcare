@@ -5,48 +5,62 @@ import classNames from 'classnames';
 import './header.css';
 import logo from '../images/logo.png';
 
-
+// header
 class Header extends  Component {
     constructor(props) {
         super(props);
-
         // state
         this.state = {
+            registerInputs: [
+                {
+                    type: 'text',
+                    id: 'forName',
+                    label: 'Name',
+                    value: ''
+                },
+                {
+                    type: 'text',
+                    id: 'forUser',
+                    label: 'User',
+                    value: ''
+                },
+                {
+                    type: 'password',
+                    id: 'forPass',
+                    label: 'Password',
+                    value: ''
+                }
+            ],
             registerPopUp: false,
-            regInputName: '',
-            registerInputLength: '',
         };
     }
-
-
-
-        handleInputChange = (e, inputField) => {
+    // take input values
+    handleInputChange = (e, index) => {
+        const updatedArray = [...this.state.registerInputs];
+        updatedArray[index].value = e.target.value;
         this.setState({
-            [inputField]: e.target.value,
-        })
-    };
-    getInputName = (e) => {
-        this.setState({
-            regInputName: e.target.value,
-            registerInputLength: e.target.value.length
+            registerInputs: updatedArray
         })
     };
     render() {
         // classnames
-        let inputPlaceholder = classNames({
-            register__input: true,
-            register__close: this.state.registerInputLength >= 1
-        });
-        return(
+
+        // return container
+        return (
             <header>
                 <form className="register-popup">
                     <h4 className="register__title">Register</h4>
-                    <div className="position-relative">
-                        <input type="text"  placeholder="" id="name" className={inputPlaceholder} onChange={(e) => this.handleInputChange(e, 'regInputName')} />
-                        <label htmlFor="name" className="register__label">Name</label>
-                    </div>
-                    <input type="text"  placeholder="User"/>
-                    <input type="text"  placeholder="Password"/>
+                    {this.state.registerInputs.map( (item, index) => {
+                        const inputPlaceholder = classNames({
+                            register__input: true,
+                            register__close: item.value.length >= 1
+                        });
+                        return <div key={index} className="position-relative">
+                            <input className={inputPlaceholder} id={item.id} onChange={e => this.handleInputChange(e, index)} />
+                            <label htmlFor={item.id} className="register__label">{item.label}</label>
+                        </div>
+                    })}
+                    {console.log(this.state.registerInputs)}
                     <button>Sign up</button>
                 </form>
                <div className="container">
@@ -71,6 +85,6 @@ class Header extends  Component {
             </header>
         )
     }
-};
+}
 
 export default Header;
