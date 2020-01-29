@@ -25,7 +25,9 @@ img{
   max-width: 100%;
   height: auto;
 }
-a{
+a, a:visited{
+  transition: all 0.3s ease;
+  color: #333;
   text-decoration: none;
 }
 a:hover{
@@ -61,7 +63,8 @@ label{
   letter-spacing: 0.5px;
 }
 button{
-  background-color: #335C67;
+  transition: all 0.3s ease;
+  background: #335C67;
   margin-top: 20px;
   color: #fff;
   cursor: pointer;
@@ -74,6 +77,9 @@ button{
   font-size: 13px;
   letter-spacing: 0.3px;
   border-radius: 20px;
+}
+button:hover{
+  background: #23434c;
 }
 .flex-3{
   flex: 0 0 33.3%;
@@ -98,4 +104,29 @@ button{
 }
 .position-relative{
   position: relative;
+}
+/* pop up */
+.globalpopup{
+  display: block;
+  position: fixed;
+  background: rgba(0,0,0,.8);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  color: #fff;
+}
+.globalpopup__active{
+  display: flex;
+}
+.popup__form{
+  padding: 30px;
+  position: fixed;
+  width:400px;
+  margin: 0 auto;
+  right: 0;
+  left: 0;
+  top: 200px;
+  border: 1px solid #ccc;
+  background: #fff;
 }

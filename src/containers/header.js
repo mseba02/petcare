@@ -31,6 +31,20 @@ class Header extends  Component {
                     value: ''
                 }
             ],
+            loginInputs: [
+                {
+                    type: 'text',
+                    id: 'loginForUser',
+                    label: 'User',
+                    value: ''
+                },
+                {
+                    type: 'password',
+                    id: 'loginForPassword',
+                    label: 'Password',
+                    value: ''
+                }
+            ],
             registerPopUp: false,
         };
     }
@@ -42,27 +56,44 @@ class Header extends  Component {
             registerInputs: updatedArray
         })
     };
+    // register on Submit
+    handleRegisterForm = (e) => {
+        let name, user, password;
+        e.preventDefault();
+        let data = this.state.registerInputs.map( item => {
+            return item.value;
+        });
+        let {a, b, c} = {data}
+        console.log(data)
+    };
     render() {
         // classnames
-
+        const registerPopup = classNames({
+           globalpopup: true,
+           globalpopup__active: true
+        });
         // return container
         return (
             <header>
-                <form className="register-popup">
-                    <h4 className="register__title">Register</h4>
-                    {this.state.registerInputs.map( (item, index) => {
-                        const inputPlaceholder = classNames({
-                            register__input: true,
-                            register__close: item.value.length >= 1
-                        });
-                        return <div key={index} className="position-relative">
-                            <input className={inputPlaceholder} id={item.id} onChange={e => this.handleInputChange(e, index)} />
-                            <label htmlFor={item.id} className="register__label">{item.label}</label>
+                <div className={registerPopup}>
+                    <form className="popup__form" onSubmit={this.handleRegisterForm}>
+                        <h4 className="register__title">Register</h4>
+                        {this.state.registerInputs.map( (item, index) => {
+                            const inputPlaceholder = classNames({
+                                register__input: true,
+                                register__close: item.value.length >= 1
+                            });
+                            return <div key={index} className="position-relative">
+                                <input className={inputPlaceholder} id={item.id} onChange={e => this.handleInputChange(e, index)} />
+                                <label htmlFor={item.id} className="register__label">{item.label}</label>
+                            </div>
+                        })}
+                        {/*{console.log(this.state.registerInputs)}*/}
+                        <div className="text-center">
+                            <button>Sign up</button>
                         </div>
-                    })}
-                    {console.log(this.state.registerInputs)}
-                    <button>Sign up</button>
-                </form>
+                    </form>
+                </div>
                <div className="container">
                    <div className="d-flex">
                        {/* logo */}
