@@ -130,3 +130,6 @@ button:hover{
   border: 1px solid #ccc;
   background: #fff;
 }
+.error{
+  color: #bd4f4f;
+}

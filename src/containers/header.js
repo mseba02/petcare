@@ -16,19 +16,22 @@ class Header extends  Component {
                     type: 'text',
                     id: 'forName',
                     label: 'Name',
-                    value: ''
+                    value: '',
+                    error: ''
                 },
                 {
                     type: 'text',
                     id: 'forUser',
                     label: 'User',
-                    value: ''
+                    value: '',
+                    error: ''
                 },
                 {
                     type: 'password',
                     id: 'forPass',
                     label: 'Password',
-                    value: ''
+                    value: '',
+                    error: ''
                 }
             ],
             loginInputs: [
@@ -46,25 +49,44 @@ class Header extends  Component {
                 }
             ],
             registerPopUp: false,
+            registerError: ''
         };
     }
     // take input values
     handleInputChange = (e, index) => {
         const updatedArray = [...this.state.registerInputs];
         updatedArray[index].value = e.target.value;
+        if(e.target.value.length >= 2) {
+            updatedArray[index].error = ''
+        } else {
+            updatedArray[index].error = 'enter at least 2 digits'
+        }
         this.setState({
             registerInputs: updatedArray
         })
     };
     // register on Submit
     handleRegisterForm = (e) => {
-        let name, user, password;
         e.preventDefault();
-        let data = this.state.registerInputs.map( item => {
-            return item.value;
-        });
-        let {a, b, c} = {data}
-        console.log(data)
+        const data = this.state.registerInputs.reduce((acc, prev) => {
+            acc[prev.label] = prev.value;
+                return acc;
+        }, {});
+        console.log(data);
+        if(data.Name.length >= 2 && data.User.length >= 2 ){
+            console.log('fine')
+            // set state
+            this.setState({
+                registerError: ''
+            })
+        } else {
+            // set state error
+            this.setState({
+                registerError: 'Please enter at least 2 digitals for user and passowrd'
+            })
+        }
+        // localstorage register form
+        localStorage.setItem(JSON.stringify(data), 'registeredAccounts');
     };
     render() {
         // classnames
@@ -86,9 +108,10 @@ class Header extends  Component {
                             return <div key={index} className="position-relative">
                                 <input className={inputPlaceholder} id={item.id} onChange={e => this.handleInputChange(e, index)} />
                                 <label htmlFor={item.id} className="register__label">{item.label}</label>
+                                <div className="error">{item.error}</div>
                             </div>
                         })}
-                        {/*{console.log(this.state.registerInputs)}*/}
+                        <span className="error">{this.state.registerError}</span>
                         <div className="text-center">
                             <button>Sign up</button>
                         </div>
