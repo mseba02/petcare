@@ -49,7 +49,7 @@ class Header extends  Component {
                 }
             ],
             registerPopUp: false,
-            registerError: ''
+            registerConfirm: ''
         };
     }
     // take input values
@@ -70,23 +70,23 @@ class Header extends  Component {
         e.preventDefault();
         const data = this.state.registerInputs.reduce((acc, prev) => {
             acc[prev.label] = prev.value;
-                return acc;
+            return acc;
         }, {});
         console.log(data);
-        if(data.Name.length >= 2 && data.User.length >= 2 ){
-            console.log('fine')
-            // set state
+        if (data.Name.length >= 2 && data.User.length >= 2 && data.Password.length >= 2) {
+            // localstorage register form
+            localStorage.setItem(JSON.stringify(data), 'registeredAccounts');
             this.setState({
-                registerError: ''
+                registerConfirm: `${data.User}, your account was succcesfully registred.`
             })
-        } else {
-            // set state error
+        } else{
+            const updateError = [...this.state.registerInputs];
+            updateError.error = 'enter at least 2 digits'
+            console.log(updateError)
             this.setState({
-                registerError: 'Please enter at least 2 digitals for user and passowrd'
+                // registeredInputs: updateError
             })
         }
-        // localstorage register form
-        localStorage.setItem(JSON.stringify(data), 'registeredAccounts');
     };
     render() {
         // classnames
@@ -111,7 +111,7 @@ class Header extends  Component {
                                 <div className="error">{item.error}</div>
                             </div>
                         })}
-                        <span className="error">{this.state.registerError}</span>
+                        <span className="confirm">{this.state.registerConfirm}</span>
                         <div className="text-center">
                             <button>Sign up</button>
                         </div>

@@ -126,10 +126,11 @@ button:hover{
   margin: 0 auto;
   right: 0;
   left: 0;
-  top: 200px;
+  top: 100px;
   border: 1px solid #ccc;
   background: #fff;
 }
 .error{
   color: #bd4f4f;
 }
+.confirm{color: mediumseagreen;}
