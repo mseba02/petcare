@@ -49,14 +49,15 @@ class Header extends  Component {
                 }
             ],
             registerPopUp: false,
-            registerConfirm: ''
+            registerConfirm: '',
+            errorInputs: false
         };
     }
     // take input values
     handleInputChange = (e, index) => {
         const updatedArray = [...this.state.registerInputs];
         updatedArray[index].value = e.target.value;
-        if(e.target.value.length >= 2) {
+        if(e.target.value.length >= 2 && this.state.errorInputs) {
             updatedArray[index].error = ''
         } else {
             updatedArray[index].error = 'enter at least 2 digits'
@@ -80,12 +81,11 @@ class Header extends  Component {
                 registerConfirm: `${data.User}, your account was succcesfully registred.`
             })
         } else{
-            const updateError = [...this.state.registerInputs];
-            updateError.error = 'enter at least 2 digits'
-            console.log(updateError)
-            this.setState({
-                // registeredInputs: updateError
+            let abc = [...this.state.registerInputs];
+            abc.map(item => {
+                return item.error;
             })
+            console.log(abc)
         }
     };
     render() {
