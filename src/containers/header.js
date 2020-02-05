@@ -5,8 +5,10 @@ import classNames from 'classnames';
 import './header.css';
 import logo from '../images/logo.png';
 
+const isInvalidInput = (inputValue) => inputValue.length < 2;
 // header
 class Header extends  Component {
+
     constructor(props) {
         super(props);
         // state
@@ -57,11 +59,13 @@ class Header extends  Component {
     handleInputChange = (e, index) => {
         const updatedArray = [...this.state.registerInputs];
         updatedArray[index].value = e.target.value;
-        if(e.target.value.length >= 2 && this.state.errorInputs) {
+        // set error
+        if(e.target.value.length >= 2) {
             updatedArray[index].error = ''
         } else {
             updatedArray[index].error = 'enter at least 2 digits'
         }
+        // update array
         this.setState({
             registerInputs: updatedArray
         })
@@ -81,13 +85,20 @@ class Header extends  Component {
                 registerConfirm: `${data.User}, your account was succcesfully registred.`
             })
         } else{
-            let abc = [...this.state.registerInputs];
-            abc.map(item => {
-                return item.error;
+            // update array index error
+            const updatedInputsArray = [...this.state.registerInputs];
+            this.state.registerInputs.forEach((input, index) => {
+                if (isInvalidInput(input.value)) {
+                    updatedInputsArray[index] = { ...input, error: 'enter at least 2 digits' }
+                }
+               this.setState({
+                   registerInputs: updatedInputsArray
+               })
+
             })
-            console.log(abc)
         }
     };
+
     render() {
         // classnames
         const registerPopup = classNames({
