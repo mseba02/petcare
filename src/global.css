@@ -95,6 +95,7 @@ button:hover{
 .inline-list li{
   display: inline-block;
   margin-left: 40px;
+  cursor: pointer;
 }
 .text-right{
   text-align: right;
@@ -110,7 +111,7 @@ button:hover{
 }
 /* pop up */
 .globalpopup{
-  display: block;
+  display: none;
   position: fixed;
   background: rgba(0,0,0,.8);
   left: 0;
@@ -121,6 +122,18 @@ button:hover{
 }
 .globalpopup__active{
   display: flex;
+}
+.popup__close{
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  right: -95px;
+  top: -14px;
+  cursor: pointer;
+}
+.popup__close svg{
+  max-width: 30px;
+  max-height: 30px;
 }
 .popup__form{
   padding: 30px;

@@ -4,6 +4,8 @@ import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
 import classNames from 'classnames';
 import './header.css';
 import logo from '../images/logo.png';
+import { ReactComponent as Close} from "../assets/close.svg";
+
 
 const isInvalidInput = (inputValue) => inputValue.length < 2;
 // header
@@ -73,16 +75,19 @@ class Header extends  Component {
     // register on Submit
     handleRegisterForm = (e) => {
         e.preventDefault();
+        // store all inputs value in object
         const data = this.state.registerInputs.reduce((acc, prev) => {
             acc[prev.label] = prev.value;
             return acc;
         }, {});
         console.log(data);
+
         if (data.Name.length >= 2 && data.User.length >= 2 && data.Password.length >= 2) {
             // localstorage register form
             localStorage.setItem(JSON.stringify(data), 'registeredAccounts');
             this.setState({
-                registerConfirm: `${data.User}, your account was succcesfully registred.`
+                registerConfirm: `${data.User}, your account was succcesfully registred.`,
+                justSignedUp: true
             })
         } else{
             // update array index error
@@ -98,18 +103,41 @@ class Header extends  Component {
             })
         }
     };
+    // open pop up
+    openPopup = () => this.setState({
+       registerPopUp: true
+    });
+    // close pop up
+    closePopup = () => {
+        // update array index error
+       const updatedInputsArray = [...this.state.registerInputs];
+       this.state.registerInputs.forEach((item, index) => {
+            if(isInvalidInput){
+                updatedInputsArray[index] = {...item, error: 'sda'}
+            }
+            this.setState({
+                registerPopUp: false
+            })
+       })
+
+    };
+
 
     render() {
         // classnames
         const registerPopup = classNames({
            globalpopup: true,
-           globalpopup__active: true
+           globalpopup__active: this.state.registerPopUp
         });
         // return container
         return (
             <header>
                 <div className={registerPopup}>
                     <form className="popup__form" onSubmit={this.handleRegisterForm}>
+                        <figure className="popup__close" onClick={this.closePopup}>
+                            <Close/>
+                        </figure>
+
                         <h4 className="register__title">Register</h4>
                         {this.state.registerInputs.map( (item, index) => {
                             const inputPlaceholder = classNames({
@@ -122,6 +150,7 @@ class Header extends  Component {
                                 <div className="error">{item.error}</div>
                             </div>
                         })}
+                        {console.log(this.state.registerPopUp)}
                         <span className="confirm">{this.state.registerConfirm}</span>
                         <div className="text-center">
                             <button>Sign up</button>
@@ -141,7 +170,7 @@ class Header extends  Component {
                                    <a href="">Log in</a>
                                </li>
                                <li>
-                                   <a href="">Register</a>
+                                   <a onClick={this.openPopup}>Register</a>
                                </li>
                            </ul>
                        </nav>
