@@ -121,8 +121,6 @@ class Header extends  Component {
        })
 
     };
-
-
     render() {
         // classnames
         const registerPopup = classNames({
