@@ -5,59 +5,56 @@ import classNames from 'classnames';
 import './header.css';
 import logo from '../images/logo.png';
 import { ReactComponent as Close} from "../assets/close.svg";
+import Nav from "../components/navigation/navigation";
 
 
 const isInvalidInput = (inputValue) => inputValue.length < 2;
 // header
 class Header extends  Component {
-
-    constructor(props) {
-        super(props);
-        // state
-        this.state = {
-            registerInputs: [
-                {
-                    type: 'text',
-                    id: 'forName',
-                    label: 'Name',
-                    value: '',
-                    error: ''
-                },
-                {
-                    type: 'text',
-                    id: 'forUser',
-                    label: 'User',
-                    value: '',
-                    error: ''
-                },
-                {
-                    type: 'password',
-                    id: 'forPass',
-                    label: 'Password',
-                    value: '',
-                    error: ''
-                }
-            ],
-            loginInputs: [
-                {
-                    type: 'text',
-                    id: 'loginForUser',
-                    label: 'User',
-                    value: ''
-                },
-                {
-                    type: 'password',
-                    id: 'loginForPassword',
-                    label: 'Password',
-                    value: ''
-                }
-            ],
-            registerPopUp: false,
-            registerConfirm: '',
-            errorInputs: false
-        };
-    }
-    // take input values
+    // state
+     state = {
+        registerInputs: [
+            {
+                type: 'text',
+                id: 'forName',
+                label: 'Name',
+                value: '',
+                error: ''
+            },
+            {
+                type: 'text',
+                id: 'forUser',
+                label: 'User',
+                value: '',
+                error: ''
+            },
+            {
+                type: 'password',
+                id: 'forPass',
+                label: 'Password',
+                value: '',
+                error: ''
+            }
+        ],
+        loginInputs: [
+            {
+                type: 'text',
+                id: 'loginForUser',
+                label: 'User',
+                value: ''
+            },
+            {
+                type: 'password',
+                id: 'loginForPassword',
+                label: 'Password',
+                value: ''
+            }
+        ],
+        registerPopUp: false,
+        registerConfirm: '',
+        errorInputs: false
+    };
+     // take input values
     handleInputChange = (e, index) => {
         const updatedArray = [...this.state.registerInputs];
         updatedArray[index].value = e.target.value;
@@ -162,16 +159,7 @@ class Header extends  Component {
                            <img src={logo} alt="logo" className="logo"/>
                        </div>
                        {/* main navigation */}
-                       <nav className="navigation flex-2 text-right">
-                           <ul className="inline-list">
-                               <li>
-                                   <a href="">Log in</a>
-                               </li>
-                               <li>
-                                   <a onClick={this.openPopup}>Register</a>
-                               </li>
-                           </ul>
-                       </nav>
+                        <Nav register={this.openPopup} />
                    </div>
                </div>
             </header>
