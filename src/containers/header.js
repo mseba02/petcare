@@ -6,6 +6,7 @@ import './header.css';
 import logo from '../images/logo.png';
 import { ReactComponent as Close} from "../assets/close.svg";
 import Nav from "../components/navigation/navigation";
+import Modal from "../components/modal/modaj";
 
 
 const isInvalidInput = (inputValue) => inputValue.length < 2;
@@ -50,12 +51,17 @@ class Header extends  Component {
                 value: ''
             }
         ],
-        registerPopUp: false,
         registerConfirm: '',
-        errorInputs: false
+        errorInputs: false,
+        modalState: {
+            loginPopUp: false,
+            registerPopUp:false
+        },
+
+
     };
      // take input values
-    handleInputChange = (e, index) => {
+    handleRegisterInputChange = (e, index) => {
         const updatedArray = [...this.state.registerInputs];
         updatedArray[index].value = e.target.value;
         // set error
@@ -78,7 +84,6 @@ class Header extends  Component {
             return acc;
         }, {});
         console.log(data);
-
         if (data.Name.length >= 2 && data.User.length >= 2 && data.Password.length >= 2) {
             // localstorage register form
             localStorage.setItem(JSON.stringify(data), 'registeredAccounts');
@@ -101,12 +106,18 @@ class Header extends  Component {
         }
     };
     // open pop up
-    openPopup = () => this.setState({
-       registerPopUp: true
-    });
+    openPopup = (action) => {
+        this.setState({
+            modalState: {
+                ...this.state.modalState,
+                [action]: true
+            }
+        })
+        console.log(this.state.modalState);
+    };
     // close pop up
     closePopup = () => {
-        // update array index error
+       // update array index error
        const updatedInputsArray = [...this.state.registerInputs];
        this.state.registerInputs.forEach((item, index) => {
             if(isInvalidInput){
@@ -116,23 +127,28 @@ class Header extends  Component {
                 registerPopUp: false
             })
        })
-
     };
     render() {
         // classnames
         const registerPopup = classNames({
-           globalpopup: true,
-           globalpopup__active: this.state.registerPopUp
+            globalpopup__active: this.state.modalState.registerPopUp
+        });
+        const loginPopup = classNames({
+            globalpopup__active: this.state.modalState.loginPopUp
+        });
+        const popupClassnames = classNames({
+            globalpopup__active: Object.values(this.state.modalState).some((modal) => !!modal)
         });
         // return container
         return (
             <header>
-                <div className={registerPopup}>
+                {/* register form */}
+                <Modal className={registerPopup}>
+                <div>
                     <form className="popup__form" onSubmit={this.handleRegisterForm}>
                         <figure className="popup__close" onClick={this.closePopup}>
                             <Close/>
                         </figure>
-
                         <h4 className="register__title">Register</h4>
                         {this.state.registerInputs.map( (item, index) => {
                             const inputPlaceholder = classNames({
@@ -140,18 +156,22 @@ class Header extends  Component {
                                 register__close: item.value.length >= 1
                             });
                             return <div key={index} className="position-relative">
-                                <input className={inputPlaceholder} id={item.id} onChange={e => this.handleInputChange(e, index)} />
+                                <input className={inputPlaceholder} id={item.id} onChange={e => this.handleRegisterInputChange(e, index)} />
                                 <label htmlFor={item.id} className="register__label">{item.label}</label>
                                 <div className="error">{item.error}</div>
                             </div>
                         })}
-                        {console.log(this.state.registerPopUp)}
                         <span className="confirm">{this.state.registerConfirm}</span>
                         <div className="text-center">
                             <button>Sign up</button>
                         </div>
                     </form>
-                </div>
+               </div>
+                </Modal>
+               {/* login form */}
+                <Modal className={loginPopup}>
+                    <p>dsadsadsadsadadasdadsadsadas</p>
+                </Modal>
                <div className="container">
                    <div className="d-flex">
                        {/* logo */}
@@ -159,7 +179,7 @@ class Header extends  Component {
                            <img src={logo} alt="logo" className="logo"/>
                        </div>
                        {/* main navigation */}
-                        <Nav register={this.openPopup} />
+                        <Nav openPopUp={this.openPopup}/>
                    </div>
                </div>
             </header>
