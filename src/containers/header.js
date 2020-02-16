@@ -19,6 +19,7 @@ class Header extends  Component {
                 type: 'text',
                 id: 'forName',
                 label: 'Name',
+                key: 'name',
                 value: '',
                 error: ''
             },
@@ -26,6 +27,7 @@ class Header extends  Component {
                 type: 'text',
                 id: 'forUser',
                 label: 'User',
+                key: 'user',
                 value: '',
                 error: ''
             },
@@ -33,6 +35,7 @@ class Header extends  Component {
                 type: 'password',
                 id: 'forPass',
                 label: 'Password',
+                key: 'pass',
                 value: '',
                 error: ''
             }
@@ -53,14 +56,14 @@ class Header extends  Component {
         ],
         registerConfirm: '',
         errorInputs: false,
-        modalState: {
+        popupState: {
             loginPopUp: false,
             registerPopUp:false
         },
+     };
 
 
-    };
-     // take input values
+    // take input values
     handleRegisterInputChange = (e, index) => {
         const updatedArray = [...this.state.registerInputs];
         updatedArray[index].value = e.target.value;
@@ -78,28 +81,33 @@ class Header extends  Component {
     // register on Submit
     handleRegisterForm = (e) => {
         e.preventDefault();
+
         // store all inputs value in object
         const data = this.state.registerInputs.reduce((acc, prev) => {
-            acc[prev.label] = prev.value;
+            acc[prev.key] = prev.value;
             return acc;
         }, {});
         console.log(data);
-        if (data.Name.length >= 2 && data.User.length >= 2 && data.Password.length >= 2) {
+        if (data.name.length >= 2 && data.user.length >= 2 && data.pass.length >= 2) {
             // localstorage register form
-            localStorage.setItem(JSON.stringify(data), 'registeredAccounts');
+            const takeData = JSON.parse(localStorage.getItem('accounts')) || [];
+            console.log(takeData);
+            takeData.push({data});
+            localStorage.setItem('accounts', JSON.stringify(takeData));
             this.setState({
-                registerConfirm: `${data.User}, your account was succcesfully registred.`,
+                registerConfirm: `${data.user}, your account was succcesfully registred.`,
                 justSignedUp: true
             })
         } else{
             // update array index error
             const updatedInputsArray = [...this.state.registerInputs];
-            this.state.registerInputs.forEach((input, index) => {
+            updatedInputsArray.forEach((input, index) => {
                 if (isInvalidInput(input.value)) {
                     updatedInputsArray[index] = { ...input, error: 'enter at least 2 digits' }
                 }
                this.setState({
-                   registerInputs: updatedInputsArray
+                   registerInputs: updatedInputsArray,
+                   registerConfirm: ''
                })
 
             })
@@ -108,45 +116,47 @@ class Header extends  Component {
     // open pop up
     openPopup = (action) => {
         this.setState({
-            modalState: {
-                ...this.state.modalState,
+            popupState: {
+                ...this.state.popupState,
                 [action]: true
             }
-        })
-        console.log(this.state.modalState);
+        });
     };
     // close pop up
-    closePopup = () => {
+    closePopup = (action) => {
        // update array index error
        const updatedInputsArray = [...this.state.registerInputs];
        this.state.registerInputs.forEach((item, index) => {
-            if(isInvalidInput){
-                updatedInputsArray[index] = {...item, error: 'sda'}
+            if(isInvalidInput(item.value)){
+                updatedInputsArray[index] = {...item, error: '', value: ''}
             }
-            this.setState({
-                registerPopUp: false
-            })
+       });
+       console.log(updatedInputsArray);
+       this.setState({
+           popupState: {
+               ...this.state.popupState,
+               [action]: false
+           },
+           registerInputs: updatedInputsArray,
+           registerConfirm: ''
        })
     };
     render() {
         // classnames
         const registerPopup = classNames({
-            globalpopup__active: this.state.modalState.registerPopUp
+            globalpopup__active: this.state.popupState.registerPopUp
         });
         const loginPopup = classNames({
-            globalpopup__active: this.state.modalState.loginPopUp
+            globalpopup__active: this.state.popupState.loginPopUp
         });
-        const popupClassnames = classNames({
-            globalpopup__active: Object.values(this.state.modalState).some((modal) => !!modal)
-        });
-        // return container
+            // return container
         return (
             <header>
                 {/* register form */}
                 <Modal className={registerPopup}>
                 <div>
                     <form className="popup__form" onSubmit={this.handleRegisterForm}>
-                        <figure className="popup__close" onClick={this.closePopup}>
+                        <figure className="popup__close" onClick={() => this.closePopup('registerPopUp')}>
                             <Close/>
                         </figure>
                         <h4 className="register__title">Register</h4>
@@ -156,7 +166,7 @@ class Header extends  Component {
                                 register__close: item.value.length >= 1
                             });
                             return <div key={index} className="position-relative">
-                                <input className={inputPlaceholder} id={item.id} onChange={e => this.handleRegisterInputChange(e, index)} />
+                                <input className={inputPlaceholder} id={item.id} onChange={e => this.handleRegisterInputChange(e, index)} value={item.value}/>
                                 <label htmlFor={item.id} className="register__label">{item.label}</label>
                                 <div className="error">{item.error}</div>
                             </div>
@@ -170,7 +180,11 @@ class Header extends  Component {
                 </Modal>
                {/* login form */}
                 <Modal className={loginPopup}>
+
                     <p>dsadsadsadsadadasdadsadsadas</p>
+                    <figure className="popup__close" onClick={() => this.closePopup('loginPopUp')}>
+                        <Close/>
+                    </figure>
                 </Modal>
                <div className="container">
                    <div className="d-flex">
@@ -182,6 +196,7 @@ class Header extends  Component {
                         <Nav openPopUp={this.openPopup}/>
                    </div>
                </div>
+                {/*{console.log(this.state.takeLocalStorage)}*/}
             </header>
         )
     }

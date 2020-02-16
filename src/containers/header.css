@@ -30,3 +30,6 @@ header{
     top: -10px;
     font-size: 12px;
 }
+.capitalize{
+    text-transform:capitalize;
+}

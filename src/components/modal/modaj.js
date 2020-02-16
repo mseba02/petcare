@@ -5,7 +5,7 @@ import './modal.css';
 // modal component
 const Modal = (props) => {
     return (
-        <div className={`${'globalpopup'} ${props.className}`}>
+        <div className={`globalpopup ${props.className}`}>
             {props.children}
         </div>
     )
