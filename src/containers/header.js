@@ -60,6 +60,7 @@ class Header extends  Component {
             loginPopUp: false,
             registerPopUp:false
         },
+        accounts: JSON.parse(localStorage.getItem('accounts')) || []
      };
 
 
@@ -91,8 +92,7 @@ class Header extends  Component {
         if (data.name.length >= 2 && data.user.length >= 2 && data.pass.length >= 2) {
             // localstorage register form
             const takeData = JSON.parse(localStorage.getItem('accounts')) || [];
-            console.log(takeData);
-            takeData.push({data});
+            takeData.push(data);
             localStorage.setItem('accounts', JSON.stringify(takeData));
             this.setState({
                 registerConfirm: `${data.user}, your account was succcesfully registred.`,
