@@ -6,7 +6,7 @@ import './header.css';
 import logo from '../images/logo.png';
 import { ReactComponent as Close} from "../assets/close.svg";
 import Nav from "../components/navigation/navigation";
-import Modal from "../components/modal/modaj";
+import Modal from "../components/modal/modal";
 
 
 const isInvalidInput = (inputValue) => inputValue.length < 2;
@@ -45,13 +45,17 @@ class Header extends  Component {
                 type: 'text',
                 id: 'loginForUser',
                 label: 'User',
-                value: ''
+                key: 'user',
+                value: '',
+                error: ''
             },
             {
                 type: 'password',
                 id: 'loginForPassword',
                 label: 'Password',
-                value: ''
+                key: 'pass',
+                value: '',
+                error: ''
             }
         ],
         registerConfirm: '',
@@ -79,12 +83,28 @@ class Header extends  Component {
             registerInputs: updatedArray
         })
     };
+    // take input values
+    handleLoginInputChange = (e, index) => {
+        const updatedArray = [...this.state.loginInputs];
+        updatedArray[index].value = e.target.value;
+        // set error
+        if(e.target.value.length >= 2) {
+            updatedArray[index].error = ''
+        } else {
+            updatedArray[index].error = 'enter at least 2 digits'
+        }
+        // update array
+        this.setState({
+            loginInputs: updatedArray
+        })
+    };
     // register on Submit
     handleRegisterForm = (e) => {
+        const {registerInputs} = this.state;
         e.preventDefault();
 
         // store all inputs value in object
-        const data = this.state.registerInputs.reduce((acc, prev) => {
+        const data = registerInputs.reduce((acc, prev) => {
             acc[prev.key] = prev.value;
             return acc;
         }, {});
@@ -96,7 +116,9 @@ class Header extends  Component {
             localStorage.setItem('accounts', JSON.stringify(takeData));
             this.setState({
                 registerConfirm: `${data.user}, your account was succcesfully registred.`,
-                justSignedUp: true
+                justSignedUp: true,
+                accounts: JSON.parse(localStorage.getItem('accounts')) || []
+
             })
         } else{
             // update array index error
@@ -113,6 +135,27 @@ class Header extends  Component {
             })
         }
     };
+    // login handler
+    handlerLogin = (e) => {
+        const { loginInputs, accounts } = this.state;
+        e.preventDefault();
+
+        // custom iteration to take individual values
+        const user = loginInputs[0].value;
+        const pass = loginInputs[1].value;
+        const checkUser = accounts.find( item => {
+            return user === item.user;
+        });
+        const checkPass = accounts.find( item => {
+            return pass === item.pass;
+        });
+        console.log(checkUser);
+        console.log(checkPass);
+       if (checkUser && checkPass) {
+           alert('you did it!');
+       }
+
+    };
     // open pop up
     openPopup = (action) => {
         this.setState({
@@ -124,20 +167,21 @@ class Header extends  Component {
     };
     // close pop up
     closePopup = (action) => {
+        const { registerInputs, loginInputs } = this.state;
+        const logInputs = [...loginInputs];
        // update array index error
-       const updatedInputsArray = [...this.state.registerInputs];
-       this.state.registerInputs.forEach((item, index) => {
-            if(isInvalidInput(item.value)){
-                updatedInputsArray[index] = {...item, error: '', value: ''}
-            }
-       });
-       console.log(updatedInputsArray);
+        loginInputs.forEach((item, index) => {
+            logInputs[index] = { ...item, error: 'seeeex' }
+        });
+        console.log(logInputs);
        this.setState({
+           loginInputs: logInputs,
+
            popupState: {
                ...this.state.popupState,
-               [action]: false
+               [action]: false,
            },
-           registerInputs: updatedInputsArray,
+
            registerConfirm: ''
        })
     };
@@ -180,11 +224,29 @@ class Header extends  Component {
                 </Modal>
                {/* login form */}
                 <Modal className={loginPopup}>
-
-                    <p>dsadsadsadsadadasdadsadsadas</p>
-                    <figure className="popup__close" onClick={() => this.closePopup('loginPopUp')}>
-                        <Close/>
-                    </figure>
+                    <div>
+                        <form className="popup__form" onSubmit={this.handlerLogin}>
+                            {/*  close  */}
+                            <figure className="popup__close" onClick={() => this.closePopup('loginPopUp')}>
+                                <Close/>
+                            </figure>
+                            <h4 className="register__title">Login</h4>
+                            { this.state.loginInputs.map( (item, index) => {
+                                const inputPlaceholder = classNames({
+                                    register__input: true,
+                                    register__close: item.value.length >= 1
+                                });
+                                return <div key={index} className="position-relative">
+                                    <input className={inputPlaceholder} onChange={e => this.handleLoginInputChange(e, index)} id={item.id} value={item.value}/>
+                                    <label htmlFor={item.id} className="register__label">{item.label}</label>
+                                    <div className="error">{item.error}</div>
+                                </div>
+                            })}
+                            <div className="text-center">
+                                <button>Log in</button>
+                            </div>
+                        </form>
+                    </div>
                 </Modal>
                <div className="container">
                    <div className="d-flex">
