@@ -60,11 +60,12 @@ class Header extends  Component {
         ],
         registerConfirm: '',
         errorInputs: false,
+        logged: false,
         popupState: {
             loginPopUp: false,
             registerPopUp:false
         },
-        accounts: JSON.parse(localStorage.getItem('accounts')) || []
+        accounts: JSON.parse(localStorage.getItem('accounts')) || [],
      };
 
 
@@ -149,10 +150,10 @@ class Header extends  Component {
         const checkPass = accounts.find( item => {
             return pass === item.pass;
         });
-        console.log(checkUser);
-        console.log(checkPass);
        if (checkUser && checkPass) {
-           alert('you did it!');
+           this.setState({
+               logged: true
+           })
        }
 
     };
@@ -170,18 +171,17 @@ class Header extends  Component {
         const { registerInputs, loginInputs } = this.state;
         const logInputs = [...loginInputs];
        // update array index error
-        loginInputs.forEach((item, index) => {
-            logInputs[index] = { ...item, error: 'seeeex' }
+        loginInputs.forEach((input, index) => {
+           if(isInvalidInput(input.value)) {
+               logInputs[index] = { ...input, error: '', value:'' }
+           }
         });
-        console.log(logInputs);
        this.setState({
            loginInputs: logInputs,
-
            popupState: {
                ...this.state.popupState,
                [action]: false,
            },
-
            registerConfirm: ''
        })
     };
@@ -255,7 +255,10 @@ class Header extends  Component {
                            <img src={logo} alt="logo" className="logo"/>
                        </div>
                        {/* main navigation */}
-                        <Nav openPopUp={this.openPopup}/>
+                       <nav className="navigation flex-2 text-right">
+                           {this.state.logged ? <span>logged</span>: <span>not logged</span> }
+                            <Nav openPopUp={this.openPopup}/>
+                       </nav>
                    </div>
                </div>
                 {/*{console.log(this.state.takeLocalStorage)}*/}
