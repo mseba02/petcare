@@ -12,4 +12,4 @@ const Modal = (props) => {
 };
 
 // export
-export default Modal;
+export default Modal; 
