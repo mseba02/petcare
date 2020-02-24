@@ -4,10 +4,10 @@ const LoginNavigation = () => {
     return (
         <ul className="inline-list">
             <li>
-                <a>Log in</a>
+                <a>logged</a>
             </li>
             <li>
-                <a>Register</a>
+                <a>logged</a>
             </li>
         </ul>
     )

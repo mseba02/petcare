@@ -7,9 +7,21 @@ import logo from '../images/logo.png';
 import { ReactComponent as Close} from "../assets/close.svg";
 import Nav from "../components/navigation/navigation";
 import Modal from "../components/modal/modal";
+import LoginNavigation from "../components/navigation/loginNavigation";
 
-
+// check input length
 const isInvalidInput = (inputValue) => inputValue.length < 2;
+
+const updateError = (array) => {
+    const updatedArray = [...array];
+    updatedArray.forEach((input, index) => {
+        if(isInvalidInput(input.value)) {
+            return updatedArray[index] = { ...input, error: 'errrrrrrorrrrrrrr'}
+        }
+    })
+    console.log(updatedArray);
+
+};
 // header
 class Header extends  Component {
     // state
@@ -60,12 +72,12 @@ class Header extends  Component {
         ],
         registerConfirm: '',
         errorInputs: false,
-        logged: false,
+        loggedUser: JSON.parse(localStorage.getItem('loggedUser')) || [],
+        accounts: JSON.parse(localStorage.getItem('accounts')) || [],
         popupState: {
             loginPopUp: false,
             registerPopUp:false
-        },
-        accounts: JSON.parse(localStorage.getItem('accounts')) || [],
+        }
      };
 
 
@@ -151,9 +163,14 @@ class Header extends  Component {
             return pass === item.pass;
         });
        if (checkUser && checkPass) {
-           this.setState({
-               logged: true
-           })
+           const loggedUser = user;
+           localStorage.setItem('loggedUser', JSON.stringify({loggedUser}));
+           console.log(JSON.parse(localStorage.getItem('loggedUser')));
+       } else {
+           updateError(this.state.loginInputs);
+           // this.setState({
+           //     loginInputs: updateError
+           // })
        }
 
     };
@@ -248,6 +265,7 @@ class Header extends  Component {
                         </form>
                     </div>
                 </Modal>
+                {console.log(this.state.loggedUser)}
                <div className="container">
                    <div className="d-flex">
                        {/* logo */}
@@ -256,8 +274,11 @@ class Header extends  Component {
                        </div>
                        {/* main navigation */}
                        <nav className="navigation flex-2 text-right">
-                           {this.state.logged ? <span>logged</span>: <span>not logged</span> }
-                            <Nav openPopUp={this.openPopup}/>
+                           {this.state.loggedUser.length >= 2 ?
+                              <LoginNavigation />:
+                               <Nav openPopUp={this.openPopup}/>
+                           }
+
                        </nav>
                    </div>
                </div>
