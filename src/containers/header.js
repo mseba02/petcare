@@ -12,16 +12,7 @@ import LoginNavigation from "../components/navigation/loginNavigation";
 // check input length
 const isInvalidInput = (inputValue) => inputValue.length < 2;
 
-const updateError = (array) => {
-    const updatedArray = [...array];
-    updatedArray.forEach((input, index) => {
-        if(isInvalidInput(input.value)) {
-            return updatedArray[index] = { ...input, error: 'errrrrrrorrrrrrrr'}
-        }
-    })
-    console.log(updatedArray);
 
-};
 // header
 class Header extends  Component {
     // state
@@ -80,7 +71,19 @@ class Header extends  Component {
         }
      };
 
-
+     updateError = (array) => {
+        const updatedArray = [...array];
+        updatedArray.forEach((input, index) => {
+            if(isInvalidInput(input.value)) {
+                updatedArray[index] = { ...input, error: 'errrrrrrorrrrrrrr'}
+            }
+        });
+        alert("yeee")
+        this.setState({
+            [array]: updatedArray
+        });
+         console.log(updatedArray);
+    };
     // take input values
     handleRegisterInputChange = (e, index) => {
         const updatedArray = [...this.state.registerInputs];
@@ -150,8 +153,9 @@ class Header extends  Component {
     };
     // login handler
     handlerLogin = (e) => {
-        const { loginInputs, accounts } = this.state;
         e.preventDefault();
+        const { loginInputs, accounts } = this.state;
+        this.updateError(loginInputs);
 
         // custom iteration to take individual values
         const user = loginInputs[0].value;
@@ -165,14 +169,15 @@ class Header extends  Component {
        if (checkUser && checkPass) {
            const loggedUser = user;
            localStorage.setItem('loggedUser', JSON.stringify({loggedUser}));
-           console.log(JSON.parse(localStorage.getItem('loggedUser')));
+           // console.log(JSON.parse(localStorage.getItem('loggedUser')));
        } else {
-           updateError(this.state.loginInputs);
+           this.updateError(this.state.loginInputs);
+           console.log(this.state.loginInputs);
            // this.setState({
            //     loginInputs: updateError
            // })
        }
-
+        console.log(this.state.loginInputs);
     };
     // open pop up
     openPopup = (action) => {
