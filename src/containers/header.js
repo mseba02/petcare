@@ -83,7 +83,7 @@ class Header extends  Component {
             [array]: updatedArray
         });
          console.log(updatedArray);
-    };
+}
     // take input values
     handleRegisterInputChange = (e, index) => {
         const updatedArray = [...this.state.registerInputs];
@@ -171,11 +171,7 @@ class Header extends  Component {
            localStorage.setItem('loggedUser', JSON.stringify({loggedUser}));
            // console.log(JSON.parse(localStorage.getItem('loggedUser')));
        } else {
-           this.updateError(this.state.loginInputs);
-           console.log(this.state.loginInputs);
-           // this.setState({
-           //     loginInputs: updateError
-           // })
+
        }
         console.log(this.state.loginInputs);
     };
