@@ -12,7 +12,6 @@ import LoginNavigation from "../components/navigation/loginNavigation";
 // check input length
 const isInvalidInput = (inputValue) => inputValue.length < 2;
 
-
 // header
 class Header extends  Component {
     // state
@@ -32,7 +31,8 @@ class Header extends  Component {
                 label: 'User',
                 key: 'user',
                 value: '',
-                error: ''
+                error: '',
+                userExists: ""
             },
             {
                 type: 'password',
@@ -58,32 +58,30 @@ class Header extends  Component {
                 label: 'Password',
                 key: 'pass',
                 value: '',
-                error: ''
+                error: '',
             }
         ],
         registerConfirm: '',
         errorInputs: false,
-        loggedUser: JSON.parse(localStorage.getItem('loggedUser')) || [],
+        userAlreadyExists: false,
+        loggedUser: JSON.parse(localStorage.getItem('loggedUser')) || "",
         accounts: JSON.parse(localStorage.getItem('accounts')) || [],
         popupState: {
             loginPopUp: false,
             registerPopUp:false
         }
      };
-
-     updateError = (array) => {
+     // update error
+     updateError = (array, method, errorMessage) => {
         const updatedArray = [...array];
         updatedArray.forEach((input, index) => {
             if(isInvalidInput(input.value)) {
-                updatedArray[index] = { ...input, error: 'errrrrrrorrrrrrrr'}
+                updatedArray[index] = { ...input, error: errorMessage}
             }
         });
-        alert("yeee")
-        this.setState({
-            [array]: updatedArray
-        });
-         console.log(updatedArray);
-}
+       return updatedArray;
+    };
+    //if that is the case, instead of writing that setState in updateError , return the updatedArray from the function and setState in the calling function
     // take input values
     handleRegisterInputChange = (e, index) => {
         const updatedArray = [...this.state.registerInputs];
@@ -124,29 +122,39 @@ class Header extends  Component {
             acc[prev.key] = prev.value;
             return acc;
         }, {});
-        console.log(data);
         if (data.name.length >= 2 && data.user.length >= 2 && data.pass.length >= 2) {
+
             // localstorage register form
             const takeData = JSON.parse(localStorage.getItem('accounts')) || [];
-            takeData.push(data);
-            localStorage.setItem('accounts', JSON.stringify(takeData));
-            this.setState({
-                registerConfirm: `${data.user}, your account was succcesfully registred.`,
-                justSignedUp: true,
-                accounts: JSON.parse(localStorage.getItem('accounts')) || []
-
-            })
-        } else{
-            // update array index error
-            const updatedInputsArray = [...this.state.registerInputs];
-            updatedInputsArray.forEach((input, index) => {
-                if (isInvalidInput(input.value)) {
-                    updatedInputsArray[index] = { ...input, error: 'enter at least 2 digits' }
+            // check if user exist
+            const userExists = takeData.find(item => {
+                return data.user === item.user;
+            });
+            if(userExists){
+                console.log('exiusta');
+                    this.setState({
+                        userAlreadyExists: true
+                    })
+                } else {
+                console.log('nu exista')
+                    takeData.push(data);
+                    localStorage.setItem('accounts', JSON.stringify(takeData));
+                    this.setState({
+                        registerConfirm: `${data.user}, your account was succcesfully registred, now you can login.`,
+                        accounts: JSON.parse(localStorage.getItem('accounts')) || [],
+                        popupState: {
+                            loginPopUp: true,
+                            registerPopUp: false,
+                            userAlreadyExists: false
+                        }
+                    })
                 }
-               this.setState({
-                   registerInputs: updatedInputsArray,
-                   registerConfirm: ''
-               })
+            } else{
+            // update array index error
+            const updatedArray = this.updateError(registerInputs, 'please sloboz');
+            this.setState({
+                registerInputs: updatedArray,
+                registerConfirm: "",
 
             })
         }
@@ -155,8 +163,6 @@ class Header extends  Component {
     handlerLogin = (e) => {
         e.preventDefault();
         const { loginInputs, accounts } = this.state;
-        this.updateError(loginInputs);
-
         // custom iteration to take individual values
         const user = loginInputs[0].value;
         const pass = loginInputs[1].value;
@@ -168,12 +174,15 @@ class Header extends  Component {
         });
        if (checkUser && checkPass) {
            const loggedUser = user;
-           localStorage.setItem('loggedUser', JSON.stringify({loggedUser}));
-           // console.log(JSON.parse(localStorage.getItem('loggedUser')));
-       } else {
+           localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
+           console.log(JSON.parse(localStorage.getItem('loggedUser')));
 
+       } else {
+           const updatedArray = this.updateError(loginInputs, "please cacat");
+           this.setState({
+               loginInputs: updatedArray
+           })
        }
-        console.log(this.state.loginInputs);
     };
     // open pop up
     openPopup = (action) => {
@@ -181,7 +190,8 @@ class Header extends  Component {
             popupState: {
                 ...this.state.popupState,
                 [action]: true
-            }
+            },
+            justSignedUp: ""
         });
     };
     // close pop up
@@ -189,10 +199,11 @@ class Header extends  Component {
         const { registerInputs, loginInputs } = this.state;
         const logInputs = [...loginInputs];
        // update array index error
-        loginInputs.forEach((input, index) => {
-           if(isInvalidInput(input.value)) {
+        logInputs.forEach((input, index) => {
+            if(!isInvalidInput(input.value)) {
                logInputs[index] = { ...input, error: '', value:'' }
            }
+            console.log(isInvalidInput(input.value))
         });
        this.setState({
            loginInputs: logInputs,
@@ -228,12 +239,13 @@ class Header extends  Component {
                                 register__close: item.value.length >= 1
                             });
                             return <div key={index} className="position-relative">
-                                <input className={inputPlaceholder} id={item.id} onChange={e => this.handleRegisterInputChange(e, index)} value={item.value}/>
+                                <input type={item.type} className={inputPlaceholder} id={item.id} onChange={e => this.handleRegisterInputChange(e, index)} value={item.value}/>
                                 <label htmlFor={item.id} className="register__label">{item.label}</label>
                                 <div className="error">{item.error}</div>
                             </div>
                         })}
-                        <span className="confirm">{this.state.registerConfirm}</span>
+                        {this.state.userAlreadyExists ?  <span className="error text-center">user already exists</span> : <span>dsad</span>}
+
                         <div className="text-center">
                             <button>Sign up</button>
                         </div>
@@ -255,18 +267,19 @@ class Header extends  Component {
                                     register__close: item.value.length >= 1
                                 });
                                 return <div key={index} className="position-relative">
-                                    <input className={inputPlaceholder} onChange={e => this.handleLoginInputChange(e, index)} id={item.id} value={item.value}/>
+                                    <input type={item.type} className={inputPlaceholder} onChange={e => this.handleLoginInputChange(e, index)} id={item.id} value={item.value}/>
                                     <label htmlFor={item.id} className="register__label">{item.label}</label>
                                     <div className="error">{item.error}</div>
                                 </div>
                             })}
+                            <span className="confirm">{this.state.registerConfirm}</span>
                             <div className="text-center">
                                 <button>Log in</button>
                             </div>
                         </form>
                     </div>
                 </Modal>
-                {console.log(this.state.loggedUser)}
+                {console.log(this.state.loggedUser.length)}
                <div className="container">
                    <div className="d-flex">
                        {/* logo */}
@@ -275,11 +288,10 @@ class Header extends  Component {
                        </div>
                        {/* main navigation */}
                        <nav className="navigation flex-2 text-right">
-                           {this.state.loggedUser.length >= 2 ?
-                              <LoginNavigation />:
+                           {this.state.loggedUser.length >=2 ?
+                               <LoginNavigation />:
                                <Nav openPopUp={this.openPopup}/>
                            }
-
                        </nav>
                    </div>
                </div>
