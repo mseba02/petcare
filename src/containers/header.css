@@ -6,7 +6,27 @@ header{
 .logo{
     max-width: 70px;
 }
-
+.mainNavigation li{
+    margin-left: 20px;
+}
+.mainNavigation{
+    margin-top: 15px;
+    justify-content: flex-end;
+}
+.mainNavigation__level2{
+    display: none;
+    position: absolute;
+    width: 120px;
+    background: #fff;
+    border: 1px solid #ccc;
+    left: -50px;
+    text-align: center;
+    padding: 10px;
+}
+.mainNavigation__level2 li{
+    margin-left: 0;
+    margin-bottom: 20px;
+}
 .register__label{
     position: absolute;
     top: 10px;

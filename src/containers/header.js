@@ -1,13 +1,14 @@
 // imports
 import React, {Component} from "react";
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import './header.css';
 import logo from '../images/logo.png';
 import { ReactComponent as Close} from "../assets/close.svg";
 import Nav from "../components/navigation/navigation";
 import Modal from "../components/modal/modal";
-import LoginNavigation from "../components/navigation/loginNavigation";
+import LoggedNavigation from "../components/navigation/loggedNavigation";
 
 // check input length
 const isInvalidInput = (inputValue) => inputValue.length < 2;
@@ -64,15 +65,15 @@ class Header extends  Component {
         registerConfirm: '',
         errorInputs: false,
         userAlreadyExists: false,
-        loggedUser: JSON.parse(localStorage.getItem('loggedUser')) || "",
         accounts: JSON.parse(localStorage.getItem('accounts')) || [],
         popupState: {
             loginPopUp: false,
             registerPopUp:false
-        }
+        },
+         loggedUser: JSON.parse(localStorage.getItem('loggedUser')) || "",
      };
      // update error
-     updateError = (array, method, errorMessage) => {
+     updateError = (array, errorMessage) => {
         const updatedArray = [...array];
         updatedArray.forEach((input, index) => {
             if(isInvalidInput(input.value)) {
@@ -81,7 +82,6 @@ class Header extends  Component {
         });
        return updatedArray;
     };
-    //if that is the case, instead of writing that setState in updateError , return the updatedArray from the function and setState in the calling function
     // take input values
     handleRegisterInputChange = (e, index) => {
         const updatedArray = [...this.state.registerInputs];
@@ -175,7 +175,12 @@ class Header extends  Component {
        if (checkUser && checkPass) {
            const loggedUser = user;
            localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
-           console.log(JSON.parse(localStorage.getItem('loggedUser')));
+           this.setState({
+               popupState: {
+                   loginPopUp: false
+               },
+               loggedUser: JSON.parse(localStorage.getItem('loggedUser'))
+           })
 
        } else {
            const updatedArray = this.updateError(loginInputs, "please cacat");
@@ -213,6 +218,10 @@ class Header extends  Component {
            },
            registerConfirm: ''
        })
+    };
+    // log out
+    logOut = () => {
+        localStorage.removeItem("loggedUser");
     };
     render() {
         // classnames
@@ -279,7 +288,7 @@ class Header extends  Component {
                         </form>
                     </div>
                 </Modal>
-                {console.log(this.state.loggedUser.length)}
+                {console.log(this.props.data)}
                <div className="container">
                    <div className="d-flex">
                        {/* logo */}
@@ -287,9 +296,9 @@ class Header extends  Component {
                            <img src={logo} alt="logo" className="logo"/>
                        </div>
                        {/* main navigation */}
-                       <nav className="navigation flex-2 text-right">
-                           {this.state.loggedUser.length >=2 ?
-                               <LoginNavigation />:
+                       <nav className="navigation flex-2 ">
+                           {this.state.loggedUser.length > 1 ?
+                               <LoggedNavigation logout={this.logOut()}/>:
                                <Nav openPopUp={this.openPopup}/>
                            }
                        </nav>
@@ -301,4 +310,10 @@ class Header extends  Component {
     }
 }
 
-export default Header;
+const mapStateToProps = (state) => {
+    return {
+        data: state.data
+    }
+}
+
+export default connect(mapStateToProps)(Header);

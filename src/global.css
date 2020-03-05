@@ -9,7 +9,6 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
 .container{
   width: 1000px;
   margin: 0 auto;
@@ -65,6 +64,12 @@ label{
   font-weight: 300;
   letter-spacing: 0.5px;
 }
+
+ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 button{
   transition: all 0.3s ease;
   background: #335C67;
@@ -91,11 +96,6 @@ button:hover{
 .flex-2{
   flex: 0 0 50%;
   max-width: 50%;
-}
-.inline-list li{
-  display: inline-block;
-  margin-left: 40px;
-  cursor: pointer;
 }
 .text-right{
   text-align: right;

@@ -4,7 +4,7 @@ import React from "react";
 // nav component
 const Nav = (props) => {
     return  (
-       <ul className="inline-list">
+       <ul className="mainNavigation d-flex text-right">
             <li>
                 <a onClick={() => props.openPopUp('loginPopUp')}>Log in</a>
             </li>
