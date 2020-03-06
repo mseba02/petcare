@@ -23,7 +23,7 @@ const LoggedNavigation = (props) => {
                 <a>Create Posting</a>
             </li>
             <li>
-                <a onClick={props.logout()}>Log out</a>
+                <a onClick={props.logout}>Log out</a>
             </li>
         </ul>
     )

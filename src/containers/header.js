@@ -222,6 +222,7 @@ class Header extends  Component {
     // log out
     logOut = () => {
         localStorage.removeItem("loggedUser");
+        console.log('a');
     };
     render() {
         // classnames
@@ -298,7 +299,7 @@ class Header extends  Component {
                        {/* main navigation */}
                        <nav className="navigation flex-2 ">
                            {this.state.loggedUser.length > 1 ?
-                               <LoggedNavigation logout={this.logOut()}/>:
+                               <LoggedNavigation logout={this.logOut}/>:
                                <Nav openPopUp={this.openPopup}/>
                            }
                        </nav>
