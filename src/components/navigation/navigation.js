@@ -6,10 +6,10 @@ const Nav = (props) => {
     return  (
        <ul className="mainNavigation d-flex text-right">
             <li>
-                <a onClick={() => props.openPopUp('loginPopUp')}>Log in</a>
+                <a href="# " onClick={() => props.openPopUp('loginPopUp')}>Log in</a>
             </li>
             <li>
-                <a onClick={() => props.openPopUp('registerPopUp')}>Register</a>
+                <a href="# " onClick={() => props.openPopUp('registerPopUp')}>Register</a>
             </li>
         </ul>
     )

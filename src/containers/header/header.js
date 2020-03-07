@@ -1,14 +1,15 @@
 // imports
 import React, {Component} from "react";
-import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import classNames from 'classnames';
+import {Link, withRouter } from "react-router-dom";
 import './header.css';
-import logo from '../images/logo.png';
-import { ReactComponent as Close} from "../assets/close.svg";
-import Nav from "../components/navigation/navigation";
-import Modal from "../components/modal/modal";
-import LoggedNavigation from "../components/navigation/loggedNavigation";
+import logo from '../../images/logo.png';
+import { ReactComponent as Close} from "../../assets/close.svg";
+import Nav from "../../components/navigation/navigation";
+import Modal from "../../components/modal/modal";
+import LoggedNavigation from "../../components/navigation/loggedNavigation";
 
 // check input length
 const isInvalidInput = (inputValue) => inputValue.length < 2;
@@ -76,9 +77,7 @@ class Header extends  Component {
      updateError = (array, errorMessage) => {
         const updatedArray = [...array];
         updatedArray.forEach((input, index) => {
-            if(isInvalidInput(input.value)) {
-                updatedArray[index] = { ...input, error: errorMessage}
-            }
+             updatedArray[index] = { ...input, error: errorMessage}
         });
        return updatedArray;
     };
@@ -160,7 +159,7 @@ class Header extends  Component {
         }
     };
     // login handler
-    handlerLogin = (e) => {
+    handlerLogin = (e, context) => {
         e.preventDefault();
         const { loginInputs, accounts } = this.state;
         // custom iteration to take individual values
@@ -180,10 +179,11 @@ class Header extends  Component {
                    loginPopUp: false
                },
                loggedUser: JSON.parse(localStorage.getItem('loggedUser'))
-           })
+           });
+           this.props.history.push('/dashboard')
 
        } else {
-           const updatedArray = this.updateError(loginInputs, "please cacat");
+           const updatedArray = this.updateError(loginInputs, "user not found");
            this.setState({
                loginInputs: updatedArray
            })
@@ -222,7 +222,10 @@ class Header extends  Component {
     // log out
     logOut = () => {
         localStorage.removeItem("loggedUser");
-        console.log('a');
+        this.setState({
+            loggedUser: []
+        });
+        this.props.history.push('/')
     };
     render() {
         // classnames
@@ -234,6 +237,7 @@ class Header extends  Component {
         });
             // return container
         return (
+            // main header
             <header>
                 {/* register form */}
                 <Modal className={registerPopup}>
@@ -294,7 +298,9 @@ class Header extends  Component {
                    <div className="d-flex">
                        {/* logo */}
                        <div className="logo-wrap flex-2">
-                           <img src={logo} alt="logo" className="logo"/>
+                           <Link to={this.state.loggedUser.length > 1 ? "/dashboard": "/"}>
+                                <img src={logo} alt="logo" className="logo"/>
+                           </Link>
                        </div>
                        {/* main navigation */}
                        <nav className="navigation flex-2 ">
@@ -310,11 +316,15 @@ class Header extends  Component {
         )
     }
 }
-
+// map state to props
 const mapStateToProps = (state) => {
     return {
         data: state.data
     }
-}
+};
 
-export default connect(mapStateToProps)(Header);
+// export header
+export default compose(
+    withRouter,
+    connect(mapStateToProps)
+)(Header);

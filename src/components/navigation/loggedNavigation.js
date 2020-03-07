@@ -1,29 +1,33 @@
 // import react
 import React from 'react';
+import {Link} from "react-router-dom";
 
 // logged navigation
 const LoggedNavigation = (props) => {
     return (
         <ul className="mainNavigation d-flex">
+            <li>
+                <Link to="/dashboard">Dashboard</Link>
+            </li>
             <li className="position-relative">
-                <a>My Profil</a>
+                <a href="# ">My Profil</a>
                 <ul className="mainNavigation__level2 ">
                     <li>
-                        <a>My ads</a>
+                        <a href="!#">My ads</a>
                     </li>
                     <li>
-                        <a>My pets</a>
+                        <a href="!#">My pets</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a>Favorites</a>
+                <a href="# ">Favorites</a>
             </li>
             <li>
-                <a>Create Posting</a>
+                <a href="# ">Create Posting</a>
             </li>
             <li>
-                <a onClick={() => props.logout()}>Log out</a>
+                <a href="# " onClick={() => props.logout()}>Log out</a>
             </li>
         </ul>
     )
