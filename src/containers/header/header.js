@@ -1,6 +1,5 @@
 // imports
 import React, {Component} from "react";
-import { connect } from 'react-redux';
 import { compose } from 'redux';
 import classNames from 'classnames';
 import {Link, withRouter } from "react-router-dom";
@@ -293,7 +292,6 @@ class Header extends  Component {
                         </form>
                     </div>
                 </Modal>
-                {console.log(this.props.data)}
                <div className="container">
                    <div className="d-flex">
                        {/* logo */}
@@ -317,14 +315,8 @@ class Header extends  Component {
     }
 }
 // map state to props
-const mapStateToProps = (state) => {
-    return {
-        data: state.data
-    }
-};
 
 // export header
 export default compose(
-    withRouter,
-    connect(mapStateToProps)
+    withRouter
 )(Header);

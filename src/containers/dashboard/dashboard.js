@@ -3,7 +3,11 @@ import React, {Component} from "react";
 class Dashboard extends  Component{
     render() {
         return(
-            <div>Dashboard</div>
+            <section className="main-dashboard padding5">
+                <div className="container">
+                    Dashboard
+                </div>
+            </section>
         )
     }
 }

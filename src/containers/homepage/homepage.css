@@ -1,6 +1,27 @@
-.homepage{
-    padding: 40px 0;
+.homepage-header{
     background: url("../../assets/dog-home.jpg") center 30% no-repeat;
     background-size: cover;
-    min-height: 400px;
+    min-height: 500px;
+}
+.homepage-header h3{
+    color: #fff;
+    font-size: 50px;
+    text-transform: uppercase;
+    margin-top: 70px;
+}
+.homepage-header h5{
+    font-size: 36px;
+    color: #fff;
+}
+.homepage-header p{
+    color: #fff;
+    font-size: 20px;
+}
+.popularProducts__title{
+    font-size: 40px;
+    color: #333;
+    margin-bottom: 30px;
+}
+.popularProducts__ul li{
+    margin-bottom: 50px;
 }

@@ -1,10 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,600i|Nunito:300,300i,400,600,600i,700&display=swap');
 body {
   margin: 0;
   font-family: 'Roboto',    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.font-nunito{
+  font-family: 'Nunito', sans-serif;
+}
+.font-nunito__sans{
+  font-family: 'Nunito Sans', sans-serif;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -15,6 +21,12 @@ code {
 }
 .d-flex{
   display: flex;
+}
+.flex-wrap{
+  flex-wrap: wrap;
+}
+.justify-content-center{
+  justify-content: center;
 }
 *{
   box-sizing: border-box;
@@ -64,7 +76,9 @@ label{
   font-weight: 300;
   letter-spacing: 0.5px;
 }
+.button{
 
+}
 ul{
   list-style: none;
   padding: 0;
@@ -97,6 +111,15 @@ button:hover{
   flex: 0 0 50%;
   max-width: 50%;
 }
+.flex-4{
+  flex: 0 0 22%;
+  max-width: 22%;
+  margin: 0 1%;
+}
+.flex-5{
+  flex: 0 0 20%;
+  max-width: 20%;
+}
 .text-right{
   text-align: right;
 }
@@ -108,6 +131,9 @@ button:hover{
 }
 .position-relative{
   position: relative;
+}
+.position-absolute{
+  position: absolute;
 }
 /* pop up */
 .globalpopup{
@@ -150,3 +176,6 @@ button:hover{
   color: #bd4f4f;
 }
 .confirm{color: mediumseagreen;}
+.padding5{
+  padding: 50px 0;
+}
